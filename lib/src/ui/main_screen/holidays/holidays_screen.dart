@@ -22,34 +22,31 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          StreamBuilder<List<HolidayModel>>(
-            stream: holidayBloc.getAllHoliday,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var data = snapshot.data;
-                print("Holidays: $data");
-                return ListView.builder(
-                  itemCount: data!.length,
-                  itemBuilder: (_, index) {
-                    return holidayWidget(
-                      context,
-                      data[index].appto,
-                      data[index].remarks,
-                      data[index].holidaydate,
-                    );
-                  },
+      body: StreamBuilder(
+        stream: holidayBloc.getAllHoliday,
+        builder: (context, AsyncSnapshot<List<HolidayModel>> snapshot) {
+          print("get");
+          print(snapshot.hasData);
+          if (snapshot.hasData) {
+            List<HolidayModel> data = snapshot.data!;
+            print("Holidays: $data");
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (_, index) {
+                return holidayWidget(
+                  context,
+                  data[index].appto,
+                  data[index].remarks,
+                  data[index].holidaydate,
                 );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
+              },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }

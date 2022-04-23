@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hr_app/src/api/repository.dart';
+import 'package:hr_app/src/jsons/home_jsons.dart';
 import 'package:hr_app/src/model/http_result.dart';
 import 'package:hr_app/src/theme/app_theme.dart';
 import 'package:hr_app/src/ui/main_screen/main_screen.dart';
@@ -172,45 +173,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onTap: () async {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
+                    //
+                    // HttpResult result = await _repository.loginApi(
+                    //     _idController.text, _passwordController.text);
 
-                    HttpResult result = await _repository.loginApi(
-                        _idController.text, _passwordController.text);
-
-                    if (result.isSuccess) {
-                      List<HomeModel> data = homeModelFromJson(
-                        json.encode(result.result),
-                      );
-                      prefs.setString("userid", data[0].userData.userId);
-                      prefs.setString("username", data[0].userData.userName);
-                      prefs.setString("design", data[0].userData.designation);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(
-                          ),
-                        ),
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CupertinoAlertDialog(
-                            title: const Text("Error"),
-                            content: Text(result.result.toString()),
-                            actions: [
-                              GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: const Center(
-                                  child: Text(
-                                    'Ok',
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    }
+                    // if (result.isSuccess) {
+                    HomeModel data = HomeModel.fromJson(
+                      homeJson,
+                    );
+                    print(data);
+                    print(data.userData.userId);
+                    print(data.userData.photo);
+                    prefs.setString("userid", data.userData.userId);
+                    prefs.setString("username", data.userData.userName);
+                    prefs.setString("design", data.userData.designation);
+                    prefs.setString("photo", data.userData.photo);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ),
+                    );
+                    // } else {
+                    //   showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return CupertinoAlertDialog(
+                    //         title: const Text("Error"),
+                    //         content: Text(result.result.toString()),
+                    //         actions: [
+                    //           GestureDetector(
+                    //             onTap: () => Navigator.pop(context),
+                    //             child: const Center(
+                    //               child: Text(
+                    //                 'Ok',
+                    //               ),
+                    //             ),
+                    //           )
+                    //         ],
+                    //       );
+                    //     },
+                    //   );
+                    // }
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

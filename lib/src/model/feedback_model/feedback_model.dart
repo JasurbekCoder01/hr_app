@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final feedbackModel = feedbackModelFromJson(jsonString);
+
 import 'dart:convert';
 
 FeedbackModel feedbackModelFromJson(String str) =>
@@ -18,7 +22,7 @@ class FeedbackModel {
         success: json["success"] ?? 0,
         message: json["message"] ?? "",
         feedbackData: json["feedback_data"] == null
-            ? <FeedbackDatum>[]
+            ? List<FeedbackDatum>.from(<FeedbackDatum>[])
             : List<FeedbackDatum>.from(
                 json["feedback_data"].map((x) => FeedbackDatum.fromJson(x))),
       );
@@ -36,7 +40,7 @@ class FeedbackDatum {
   factory FeedbackDatum.fromJson(Map<String, dynamic> json) => FeedbackDatum(
         entryDateF: json["EntryDateF"] ?? "",
         feedbackDetails: json["feedback_details"] == null
-            ? <FeedbackDetail>[]
+            ? List<FeedbackDetail>.from(<FeedbackDetail>[])
             : List<FeedbackDetail>.from(json["feedback_details"]
                 .map((x) => FeedbackDetail.fromJson(x))),
       );
@@ -66,7 +70,7 @@ class FeedbackDetail {
         message: json["Message"] ?? "",
         entryBy: json["EntryBy"] ?? "",
         entryDate: json["EntryDate"] == null
-            ? DateTime.now()
+            ? DateTime.parse("2022")
             : DateTime.parse(json["EntryDate"]),
       );
 }

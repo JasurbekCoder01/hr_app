@@ -11,7 +11,6 @@ import 'package:hr_app/src/ui/main_screen/notice/notice_screen.dart';
 import 'package:hr_app/src/utils/utils.dart';
 
 class MainScreen extends StatefulWidget {
-
   const MainScreen({
     Key? key,
   }) : super(key: key);
@@ -50,13 +49,12 @@ class _MainScreenState extends State<MainScreen> {
       body: PageView(
         controller: _controller,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          const NoticeScreen(),
-          const MyLeaveScreen(),
-          HomeScreen(
-          ),
-          const FeedBackScreen(),
-          const HolidaysScreen(),
+        children: const [
+          NoticeScreen(),
+          MyLeaveScreen(),
+          HomeScreen(),
+          FeedBackScreen(),
+          HolidaysScreen(),
         ],
       ),
       bottomNavigationBar: ConvexAppBar(

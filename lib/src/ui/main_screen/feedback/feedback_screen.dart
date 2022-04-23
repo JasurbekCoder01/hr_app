@@ -24,35 +24,29 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          StreamBuilder(
-            stream: feedbackBloc.getAllFeedback,
-            builder: (context, AsyncSnapshot<FeedbackModel> snapshot) {
-              if (snapshot.hasData) {
-                var data = snapshot.data;
-                print("FeedBack: $data");
-                return ListView.builder(
-                  itemCount: data!.feedbackData.length,
-                  itemBuilder: (context, index) {
-                    var feekData = data.feedbackData;
-                    return feedbackWidget(
-                      context,
-                      feekData[index].feedbackDetails[index].message,
-                      feekData[index].feedbackDetails[index].message,
-                      feekData[index].feedbackDetails[index].entryDate,
-                    );
-                  },
+      body: StreamBuilder(
+        stream: feedbackBloc.getAllFeedback,
+        builder: (context, AsyncSnapshot<FeedbackModel> snapshot) {
+          if (snapshot.hasData) {
+            FeedbackModel data = snapshot.data!;
+            return ListView.builder(
+              itemCount: data.feedbackData.length,
+              itemBuilder: (context, index) {
+                var feekData = data.feedbackData;
+                return feedbackWidget(
+                  context,
+                  feekData[index].feedbackDetails[index].message,
+                  feekData[index].feedbackDetails[index].message,
+                  feekData[index].feedbackDetails[index].entryDate,
                 );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
+              },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
