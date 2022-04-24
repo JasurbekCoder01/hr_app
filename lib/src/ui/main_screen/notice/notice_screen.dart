@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hr_app/src/bloc/notice_bloc.dart';
+import 'package:hr_app/src/model/notice_model.dart';
 import 'package:hr_app/src/theme/app_theme.dart';
 import 'package:hr_app/src/utils/utils.dart';
 
@@ -12,17 +14,46 @@ class NoticeScreen extends StatefulWidget {
 
 class _NoticeScreenState extends State<NoticeScreen> {
   @override
+  void initState() {
+    super.initState();
+    noticeBloc.getAllNotice();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double h = Utils.windowHeight(context);
     return Scaffold(
       backgroundColor: AppTheme.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 16 * h,
-          ),
-          noticeWidget(context, "Here", "Notice title", DateTime.now()),
-        ],
+      body: StreamBuilder(
+        stream: noticeBloc.allNotice,
+        builder: (context, AsyncSnapshot<NoticeModel> snapshot) {
+          if (snapshot.hasData) {
+            NoticeModel data = snapshot.data!;
+            return Column(
+              children: [
+                SizedBox(
+                  height: 16 * h,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: data.noticeData.length,
+                    itemBuilder: (_, index) {
+                      return noticeWidget(
+                          context,
+                          data.noticeData[index].title,
+                          data.noticeData[index].subject,
+                          data.noticeData[index].entryDate);
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
@@ -39,11 +70,11 @@ Widget noticeWidget(
         builder: (context) {
           return CupertinoAlertDialog(
             title: Text(
-              name,
+              title,
               style: Utils.style(18 * h, 24, AppTheme.black, FontWeight.normal),
             ),
             content: Text(
-              "Leave reason: Hey Bruce, what's going on? Did you figured it out with the buget? Still",
+              name,
               maxLines: 3,
               style: Utils.style(
                   16 * h, 24, AppTheme.black.withOpacity(0.5), FontWeight.w300),
@@ -95,7 +126,7 @@ Widget noticeWidget(
           Container(
             margin: EdgeInsets.only(right: 8 * w),
             child: Text(
-              "Leave reason: Hey Bruce, what's going on? Did you figured it out with the buget? Still",
+              name,
               style: Utils.style(
                   16 * h, 24, AppTheme.black.withOpacity(0.5), FontWeight.w300),
             ),
