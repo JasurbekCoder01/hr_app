@@ -20,14 +20,15 @@ class FeedbackBloc {
     //     json.encode(response.result),
     //   );
 
-    Future.delayed(Duration(milliseconds: 200), () {
-      FeedbackModel data = FeedbackModel.fromJson(
-        feedbackJson,
-      );
-      print(data.message);
-      print(data.success);
-      _feedbackFetch.sink.add(data);
-    });
+    Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        FeedbackModel data = FeedbackModel.fromJson(
+          feedbackJson,
+        );
+        _feedbackFetch.sink.add(data);
+      },
+    );
 
     //}
   }
