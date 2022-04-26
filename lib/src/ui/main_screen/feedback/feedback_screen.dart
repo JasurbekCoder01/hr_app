@@ -33,11 +33,16 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
               itemCount: data.feedbackData.length,
               itemBuilder: (context, index) {
                 var feekData = data.feedbackData;
-                return feedbackWidget(
-                  context,
-                  feekData[index].feedbackDetails[index].message,
-                  feekData[index].feedbackDetails[index].message,
-                  feekData[index].feedbackDetails[index].entryDate,
+                return ListView.builder(
+                  itemCount: feekData[index].feedbackDetails.length,
+                  itemBuilder: (context, index1) {
+                    return feedbackWidget(
+                      context,
+                      feekData[index].feedbackDetails[index1].message,
+                      feekData[index].feedbackDetails[index1].message,
+                      feekData[index].feedbackDetails[index1].entryDate,
+                    );
+                  },
                 );
               },
             );
